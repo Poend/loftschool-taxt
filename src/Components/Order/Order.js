@@ -81,9 +81,9 @@ export default class Order extends Component {
 
   render() {
     return (
-      <div>
+      <>
         {this.generateInputs(data)}
-      </div>
+      </>
     )
   }
 }
