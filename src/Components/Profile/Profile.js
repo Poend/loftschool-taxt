@@ -1,4 +1,58 @@
-import React, { useState } from 'react'
+// import React, { useState } from 'react'
+
+// const data = {
+//   left: [
+//     { label: 'Номер карты:', name: 'card-nubmer' },
+//     { label: 'Срок действия:', name: 'card-expiration-date' },
+//   ],
+//   right: [
+//     { label: 'Имя владельца:', name: 'owner-name' },
+//     { label: 'CVC', name: 'CVC', type: 'password', changeableType: true }
+//   ]
+// }
+
+
+// const Profile = () => {
+
+//   const [profileData, setProfileData] = useState({})
+
+//   const generateInputs = (someArr) => {
+//     return someArr.map(({label, name, type, changeableType}) => {
+//       return (
+//         <div key={name}>
+
+//           <label
+//             htmlFor={name}>
+//             {label}
+//           </label>
+
+//           <input 
+//             type={type ? type : 'text'}
+//             id={name}
+//             name={name}
+//             value={profileData[name] ? profileData[name] : ''}
+//             onChange={(event) => setProfileData({
+//               ...profileData,
+//               [`${event.target.name}`]: event.target.value
+//             })}
+//           />
+
+//         </div>
+//       )
+//     })
+//   }
+
+//   return (
+//     <div>
+//       {generateInputs(data.left)}
+//       {generateInputs(data.right)}
+//     </div>
+//   )
+// }
+
+// export default Profile
+
+import React, { Component } from 'react'
 
 const data = {
   left: [
@@ -11,13 +65,21 @@ const data = {
   ]
 }
 
+export default class Profile extends Component {
 
-const Profile = () => {
+  state = {
+    profileData: {}
+  }
 
-  const [profileData, setProfileData] = useState({})
+  setProfileData = (event) => {
+    this.setState({
+      [`${event.target.name}`]: event.target.value
+    })
+  }
 
-  const generateInputs = (someArr) => {
-    return someArr.map(({label, name, type, changeableType}) => {
+  generateInputs = (someArr) => {
+    const { profileData } = this.state
+    return someArr.map(({ label, name, type, changeableType }) => {
       return (
         <div key={name}>
 
@@ -26,15 +88,12 @@ const Profile = () => {
             {label}
           </label>
 
-          <input 
+          <input
             type={type ? type : 'text'}
             id={name}
             name={name}
-            value={profileData[name] ? profileData[name] : ''}
-            onChange={(event) => setProfileData({
-              ...profileData,
-              [`${event.target.name}`]: event.target.value
-            })}
+            value={profileData[name]}
+            onChange={(event) => this.setProfileData(event)}
           />
 
         </div>
@@ -42,12 +101,12 @@ const Profile = () => {
     })
   }
 
-  return (
-    <div>
-      {generateInputs(data.left)}
-      {generateInputs(data.right)}
-    </div>
-  )
+  render() {
+    return (
+      <div>
+        {this.generateInputs(data.left)}
+        {this.generateInputs(data.right)}
+      </div>
+    )
+  }
 }
-
-export default Profile
