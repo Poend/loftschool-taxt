@@ -177,6 +177,12 @@ export default class Auth extends Component {
     })
   }
 
+  onSubmit = (event) => {
+    event.preventDefault()
+    const {changePages = {}} = this.props
+    changePages('Map')
+  }
+
   render() {
     const { authType } = this.state
     return (
@@ -192,7 +198,7 @@ export default class Auth extends Component {
             </a>
           </p>
         </div>
-        <form>
+        <form onSubmit={event => this.onSubmit(event)}>
           {this.generateInputs(data[authType].inputs)}
           <button type='submit'>
             {data[authType].buttonText}

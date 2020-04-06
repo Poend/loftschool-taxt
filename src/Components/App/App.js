@@ -81,9 +81,9 @@ export default class App extends Component {
       case "Profile":
         return <Profile />
       case "Auth":
-        return <Auth />
+        return <Auth changePages={this.changePages}/>
       default:
-        return <Auth />
+        return <Auth changePages={this.changePages}/>
     }
   }
 
