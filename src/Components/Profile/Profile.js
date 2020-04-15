@@ -1,99 +1,50 @@
-// import React, { useState } from 'react'
+import React, { useState } from 'react'
+import Input from '@material-ui/core/Input'
+import FormLabel from '@material-ui/core/FormLabel'
+import data from './data'
+import propTypes from 'prop-types'
+import { MCIcon } from 'loft-taxi-mui-theme'
+import Button from '@material-ui/core/Button'
 
-// const data = {
-//   left: [
-//     { label: 'Номер карты:', name: 'card-nubmer' },
-//     { label: 'Срок действия:', name: 'card-expiration-date' },
-//   ],
-//   right: [
-//     { label: 'Имя владельца:', name: 'owner-name' },
-//     { label: 'CVC', name: 'CVC', type: 'password', changeableType: true }
-//   ]
-// }
+const Profile = ({ classes }) => {
 
+  const {
+    profileLayout,
+    headerText,
+    subHeaderText,
+    card,
+    profileWrapper,
+    mcIcon,
+    label,
+    inputItem,
+    cardWrapper,
+    button
+  } = classes
 
-// const Profile = () => {
+  const [profileData, setProfileData] = useState({})
 
-//   const [profileData, setProfileData] = useState({})
-
-//   const generateInputs = (someArr) => {
-//     return someArr.map(({label, name, type, changeableType}) => {
-//       return (
-//         <div key={name}>
-
-//           <label
-//             htmlFor={name}>
-//             {label}
-//           </label>
-
-//           <input 
-//             type={type ? type : 'text'}
-//             id={name}
-//             name={name}
-//             value={profileData[name] ? profileData[name] : ''}
-//             onChange={(event) => setProfileData({
-//               ...profileData,
-//               [`${event.target.name}`]: event.target.value
-//             })}
-//           />
-
-//         </div>
-//       )
-//     })
-//   }
-
-//   return (
-//     <div>
-//       {generateInputs(data.left)}
-//       {generateInputs(data.right)}
-//     </div>
-//   )
-// }
-
-// export default Profile
-
-import React, { Component } from 'react'
-
-const data = {
-  left: [
-    { label: 'Номер карты:', name: 'card-nubmer' },
-    { label: 'Срок действия:', name: 'card-expiration-date' },
-  ],
-  right: [
-    { label: 'Имя владельца:', name: 'owner-name' },
-    { label: 'CVC', name: 'CVC', type: 'password', changeableType: true }
-  ]
-}
-
-export default class Profile extends Component {
-
-  state = {
-    profileData: {}
-  }
-
-  setProfileData = (event) => {
-    this.setState({
-      [`${event.target.name}`]: event.target.value
-    })
-  }
-
-  generateInputs = (someArr) => {
-    const { profileData } = this.state
-    return someArr.map(({ label, name, type, changeableType }) => {
+  const generateInputs = (someArr) => {
+    return someArr.map(el => {
       return (
-        <div key={name}>
+        <div
+          className={inputItem}
+          key={el.name}>
 
-          <label
-            htmlFor={name}>
-            {label}
-          </label>
+          <FormLabel
+            className={label}
+            htmlFor={el.name}>
+            {el.label}
+          </FormLabel>
 
-          <input
-            type={type ? type : 'text'}
-            id={name}
-            name={name}
-            value={profileData[name]}
-            onChange={(event) => this.setProfileData(event)}
+          <Input
+            type={el.type ? el.type : 'text'}
+            id={el.name}
+            name={el.name}
+            value={profileData[el.name] ? profileData[el.name] : ''}
+            onChange={(event) => setProfileData({
+              ...profileData,
+              [`${event.target.name}`]: event.target.value
+            })}
           />
 
         </div>
@@ -101,12 +52,30 @@ export default class Profile extends Component {
     })
   }
 
-  render() {
-    return (
-      <div>
-        {this.generateInputs(data.left)}
-        {this.generateInputs(data.right)}
+  return (
+    <div className={profileLayout}>
+      <div className={profileWrapper}>
+        <p className={headerText}>Профиль</p>
+        <p className={subHeaderText}>Способ оплаты</p>
+        <div className={cardWrapper}>
+          <div className={card}>
+            <MCIcon className={mcIcon}/>
+            {generateInputs(data.left)}
+          </div>
+          <div className={card}>
+            {generateInputs(data.right)}
+          </div>
+        </div>
+        <Button className={button}>
+          Сохранить
+        </Button>
       </div>
-    )
-  }
+    </div>
+  )
 }
+
+Profile.propTypes = {
+  classes: propTypes.object
+}
+
+export default Profile

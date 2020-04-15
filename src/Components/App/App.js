@@ -1,100 +1,58 @@
-// import React, { useState } from 'react';
-// import Auth from '../Auth'
-// import Header from '../Header'
-// import Order from '../Order'
-// import Profile from '../Profile'
-
-
-// const pseudoAuth = {
-//   login: 'test',
-//   password: 'test'
-// }
-
-// function App() {
-
-//   const [menuItems, setMenuItems] = useState([
-//     { text: 'Карта', link: 'Map', active: false },
-//     { text: 'Профиль', link: 'Profile', active: false },
-//     { text: 'Войти', link: 'Auth', active: true },
-//   ])
-
-//   const pseudoRouting = (menuItems) => {
-
-//     const activePage = menuItems.filter(({ active }) => active)[0]
-//     const { link } = activePage
-
-//     switch (link) {
-//       case "Map":
-//         return <Order />
-//       case "Profile":
-//         return <Profile />
-//       case "Auth":
-//         return <Auth pseudoAuth={pseudoAuth} menuItems={menuItems} setMenuItems={setMenuItems} />
-//       default:
-//         return <Auth pseudoAuth={pseudoAuth} menuItems={menuItems} setMenuItems={setMenuItems} />
-//     }
-//   }
-
-//   return (
-//     <div className="App">
-//       <Header menuItems={menuItems} setMenuItems={setMenuItems} />
-//       {pseudoRouting(menuItems)}
-//     </div>
-//   );
-// }
-// 
-// export default App;
-
-
-import React, { Component } from 'react'
+import React, { useState } from 'react';
 import Auth from '../Auth'
 import Header from '../Header'
 import Order from '../Order'
 import Profile from '../Profile'
+// import { authContext } from '../../Context/AuthContext'
+import { Route, Switch, Redirect } from 'react-router-dom'
+import { connect } from 'react-redux'
+import propTypes from 'prop-types'
 
-export default class App extends Component {
+function App({ classes, authStatus }) {
 
-  state = {
-    menuItems: [
-      { text: 'Карта', link: 'Map', active: false },
-      { text: 'Профиль', link: 'Profile', active: false },
-      { text: 'Войти', link: 'Auth', active: true },
-    ]
-  }
+  const {
+    mainLayout
+  } = classes
 
-  changePages = (link) => {
-    const { menuItems } = this.state
-    const newMenuItems = menuItems.map(el => el.link === link ? {...el, active: true} : {...el, active: false})
-      this.setState({
-        menuItems: newMenuItems
-      })
-  }
+  const [menuItems, setMenuItems] = useState([
+    { text: 'Карта', link: 'Map', active: false },
+    { text: 'Профиль', link: 'Profile', active: false },
+    { text: 'Войти', link: 'Auth', active: true },
+  ])
 
-  pseudoRouting = (menuItems) => {
+  return (
+    <div className={mainLayout}>
+      {authStatus
+        ?
+        <Switch>
+          <Route path='/order'>
+            <Header menuItems={menuItems} setMenuItems={setMenuItems} />
+            <Order />
+          </Route>
+          <Route path='/profile'>
+            <Header menuItems={menuItems} setMenuItems={setMenuItems} />
+            <Profile />
+          </Route>
+          <Redirect to='/order' />
+        </Switch>
+        :
+        <Redirect to='/'/>
+      }
+      <Route exact path='/' component={Auth} />
+    </div>
+  );
+}
 
-    const activePage = menuItems.filter(({ active }) => active)[0]
-    const { link } = activePage
+// prop-types
+App.propTypes = {
+  classes: propTypes.object,
+  authStatus: propTypes.bool.isRequired
+}
 
-    switch (link) {
-      case "Map":
-        return <Order />
-      case "Profile":
-        return <Profile />
-      case "Auth":
-        return <Auth changePages={this.changePages}/>
-      default:
-        return <Auth changePages={this.changePages}/>
-    }
-  }
-
-
-  render() {
-    const { menuItems } = this.state
-    return (
-      <div className="App">
-        <Header menuItems={menuItems} changePages={this.changePages}/>
-        {this.pseudoRouting(menuItems)}
-      </div>
-    )
+const mapStateToProps = ({ authStatus }) => {
+  return {
+    authStatus
   }
 }
+
+export default connect(mapStateToProps)(App)

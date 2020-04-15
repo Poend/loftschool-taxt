@@ -1,60 +1,49 @@
-// import React from 'react'
+import React from 'react'
+import Button from '@material-ui/core/Button'
+import { Link } from 'react-router-dom'
+import { Logo } from 'loft-taxi-mui-theme'
+import propTypes from 'prop-types'
 
+const Header = ({ menuItems, classes }) => {
 
-// const Header = ({ menuItems, setMenuItems }) => {
+  const {
+    headerLayout,
+    menuWrapper,
+    headerWrapper
+  } = classes
 
-//   const changePage = (menuItems, link) => {
-//     const newMenuItems = menuItems.map(el => el.link === link ? {...el, active: true} : {...el, active: false})
-//     setMenuItems(newMenuItems)
-//   }
-
-//   const generateMenuItems = (someArr) => {
-//     return someArr.map(({ text, link, active }) => {
-//       return (
-//         <button
-//           key={link}
-//           className={active ? 'menu-item__active' : null}
-//           onClick={() => changePage(menuItems, link)}
-//         >
-//           {text}
-//         </button>
-//       )
-//     })
-//   }
-
-//   return (
-//     <div>
-//       {generateMenuItems(menuItems)}
-//     </div>
-//   )
-// }
-
-// export default Header
-
-import React, { Component } from 'react'
-
-export default class Header extends Component {
-
-  generateMenuItems = () => {
-    const { changePages = {}, menuItems } = this.props
-    return menuItems.map(({ text, link, active }) => {
+  const generateMenuItems = (someArr) => {
+    return someArr.map(({ text, link, active }) => {
       return (
-        <button
-          key={link}
-          className={active ? 'menu-item__active' : null}
-          onClick={() => changePages(link)}
-        >
-          {text}
-        </button>
+        <Link
+          style={{ textDecoration: 'none' }}
+          to={`/${link}`}
+          key={link}>
+          <Button
+            className={active ? 'menu-item__active' : null}
+          >
+            {text}
+          </Button>
+        </Link>
       )
     })
   }
 
-  render() {
-    return (
-      <div>
-        {this.generateMenuItems()}
+  return (
+    <div className={headerLayout}>
+      <div className={headerWrapper}>
+        <Logo />
+        <div className={menuWrapper}>
+          {generateMenuItems(menuItems)}
+        </div>
       </div>
-    )
-  }
+    </div>
+  )
 }
+
+// prop-types
+Header.propTypes = {
+  classes: propTypes.object
+}
+
+export default Header

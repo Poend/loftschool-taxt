@@ -1,89 +1,90 @@
-// import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
+import mapboxgl from 'mapbox-gl'
+import Input from '@material-ui/core/Input'
+import FormLabel from '@material-ui/core/FormLabel'
+import Button from '@material-ui/core/Button'
+import propTypes from 'prop-types'
+import data from './data'
 
-// const data = [
-//   { label: 'Откуда', name: 'start' },
-//   { label: 'Куда', name: 'destination' }
-// ]
+mapboxgl.accessToken = 'pk.eyJ1IjoiZG1pdHJpeS1seW5rYWdlIiwiYSI6ImNrOHpoOXRiajBycG0zZXRhZ256aTUxaG8ifQ.kd3Zw0dq9lwmO03qe9y1ew'
 
-// const Order = () => {
+const Order = ({ classes }) => {
 
-//   const [orderData, setOrderData] = useState({})
+  const {
+    destinationLayout,
+    inputItem,
+    button
+  } = classes
 
-//   const generateInputs = (someArr) => {
-//     return someArr.map(({ label, name }) => {
-//       return (
-//         <div key={name}>
-//           <label
-//             htmlFor={name}>
-//             {label}
-//           </label>
-//           <input
-//             name={name}
-//             id={name}
-//             value={orderData[name] ? orderData[name] : ''}
-//             onChange={(event) => setOrderData({
-//               ...orderData,
-//               [`${event.target.name}`]: event.target.value
-//             })}
-//           />
-//         </div>
-//       )
-//     })
-//   }
+  const [orderData, setOrderData] = useState({})
+  const [coordinates, setCoordinates] = useState({ lng: 37.6170572, lat: 55.752139, zoom: 10.25 })
 
-//   return (
-//     <div>
-//       {generateInputs(data)}
-//     </div>
-//   )
-// }
+  const mapContainer = useRef(null)
 
-// export default Order
+  useEffect(() => {
+    if (mapContainer.current) {
+      const newMapBoxGl = new mapboxgl.Map({
+        container: mapContainer.current,
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center: [coordinates.lng, coordinates.lat],
+        zoom: coordinates.zoom
+      })
+      newMapBoxGl.on('move', () => {
+        setCoordinates({
+          lng: newMapBoxGl.getCenter().lng.toFixed(4),
+          lat: newMapBoxGl.getCenter().lat.toFixed(4),
+          zoom: newMapBoxGl.getZoom().toFixed(2)
+        })
+      })
+    }
+  }, [])
 
-import React, { Component } from 'react'
-
-const data = [
-  { label: 'Откуда', name: 'start' },
-  { label: 'Куда', name: 'destination' }
-]
-
-export default class Order extends Component {
-
-  state = {
-    orderData: {}
-  }
-
-  setInputValue = (event) => {
-    this.setState({
-      [`${event.target.name}`]: event.target.value
-    })
-  }
-
-  generateInputs = (someArr) => {
-    const { orderData } = this.state
+  const generateInputs = (someArr) => {
     return someArr.map(({ label, name }) => {
       return (
-        <div key={name}>
-          <label
+        <div
+          className={inputItem}
+          key={name}>
+          <FormLabel
             htmlFor={name}>
             {label}
-          </label>
-          <input
+          </FormLabel>
+          <Input
             name={name}
             id={name}
-            value={orderData[name]}
-            onChange={(event) => this.setInputValue(event)}
+            value={orderData[name] ? orderData[name] : ''}
+            onChange={(event) => setOrderData({
+              ...orderData,
+              [`${event.target.name}`]: event.target.value
+            })}
           />
         </div>
       )
     })
   }
 
-  render() {
-    return (
-      <>
-        {this.generateInputs(data)}
-      </>
-    )
-  }
+  return (
+    <div style={{ height: '100%', position: 'relative' }}>
+      <div className={destinationLayout}>
+        {generateInputs(data)}
+        <Button className={button}>
+          Вызвать такси
+        </Button>
+      </div>
+      <div
+        className='mapContainer'
+        ref={mapContainer}
+        style={{
+          height: '100%'
+        }}>
+      </div>
+    </div>
+  )
 }
+
+// prop-types
+Order.propTypes = {
+  classes: propTypes.object
+}
+
+export default Order
