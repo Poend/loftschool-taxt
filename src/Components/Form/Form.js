@@ -1,17 +1,17 @@
-import React, { useState } from 'react'
-// import { authContext } from '../../Context/AuthContext'
+import React, { useState, useContext } from 'react'
+import { authContext } from '../../Context/AuthContext'
 import Input from '@material-ui/core/Input'
 import FormLabel from '@material-ui/core/FormLabel'
 import Link from '@material-ui/core/Link'
 import Button from '@material-ui/core/Button'
 import { data } from './data'
-import actions from '../../Redux/Actions'
-import { connect } from 'react-redux'
+// import actions from '../../Redux/Actions'
+// import { connect } from 'react-redux'
 import propTypes from 'prop-types'
 
-const { setAuthStatus } = actions
+// const { setAuthStatus } = actions
 
-const Form = ({ classes, user }) => {
+const Form = ({ classes }) => {
   const {
     formLayout,
     formHeader,
@@ -23,10 +23,11 @@ const Form = ({ classes, user }) => {
     form
   } = classes
 
+  const authCtx = useContext(authContext)
+  const { login = {} } = authCtx
+
   const [authType, setAuthType] = useState('signin')
   const [formData, setFormData] = useState({})
-
-  // const auth = useContext(authContext)
 
   const changeAuthType = (event, authType) => {
     event.preventDefault()
@@ -66,9 +67,7 @@ const Form = ({ classes, user }) => {
 
   const submit = (event) => {
     event.preventDefault()
-    if(formData.login === user.login && formData.password === user.password){
-      setAuthStatus(true)
-    }
+    login(formData.login, formData.password)
   }
 
   return (
@@ -97,14 +96,18 @@ const Form = ({ classes, user }) => {
 // prop-types
 Form.propTypes = {
   classes: propTypes.object,
-  user: propTypes.object.isRequired
 }
+// Form.propTypes = {
+//   classes: propTypes.object,
+//   user: propTypes.object.isRequired
+// }
 
-const mapStateToProps = ({ user }) => {
-  return {
-    user
-  }
-}
+// const mapStateToProps = ({ user }) => {
+//   return {
+//     user
+//   }
+// }
 
 
-export default connect(mapStateToProps)(Form)
+export default Form
+// export default connect(mapStateToProps)(Form)

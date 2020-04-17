@@ -17,7 +17,7 @@ const Header = ({ menuItems, classes }) => {
       return (
         <Link
           style={{ textDecoration: 'none' }}
-          to={`/${link}`}
+          to={`${link}`}
           key={link}>
           <Button
             className={active ? 'menu-item__active' : null}

@@ -1,28 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Auth from '../Auth'
 import Header from '../Header'
 import Order from '../Order'
 import Profile from '../Profile'
-// import { authContext } from '../../Context/AuthContext'
+import { authContext } from '../../Context/AuthContext'
 import { Route, Switch, Redirect } from 'react-router-dom'
-import { connect } from 'react-redux'
+// import { connect } from 'react-redux'
 import propTypes from 'prop-types'
 
-function App({ classes, authStatus }) {
+function App({ classes }) {
+
+  const authCtx = useContext(authContext)
+
+  const { isLoggedIn } = authCtx
 
   const {
     mainLayout
   } = classes
 
   const [menuItems, setMenuItems] = useState([
-    { text: 'Карта', link: 'Map', active: false },
-    { text: 'Профиль', link: 'Profile', active: false },
-    { text: 'Войти', link: 'Auth', active: true },
+    { text: 'Карта', link: '/order', active: false },
+    { text: 'Профиль', link: '/profile', active: false },
+    { text: 'Войти', link: '/', active: true },
   ])
 
   return (
     <div className={mainLayout}>
-      {authStatus
+      {isLoggedIn
         ?
         <Switch>
           <Route path='/order'>
@@ -36,7 +40,7 @@ function App({ classes, authStatus }) {
           <Redirect to='/order' />
         </Switch>
         :
-        <Redirect to='/'/>
+        <Redirect to='/' />
       }
       <Route exact path='/' component={Auth} />
     </div>
@@ -46,13 +50,17 @@ function App({ classes, authStatus }) {
 // prop-types
 App.propTypes = {
   classes: propTypes.object,
-  authStatus: propTypes.bool.isRequired
 }
+// App.propTypes = {
+//   classes: propTypes.object,
+//   authStatus: propTypes.bool.isRequired
+// }
 
-const mapStateToProps = ({ authStatus }) => {
-  return {
-    authStatus
-  }
-}
+// const mapStateToProps = ({ authStatus }) => {
+//   return {
+//     authStatus
+//   }
+// }
 
-export default connect(mapStateToProps)(App)
+export default App
+// export default connect(mapStateToProps)(App)

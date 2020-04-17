@@ -17,27 +17,20 @@ const Order = ({ classes }) => {
   } = classes
 
   const [orderData, setOrderData] = useState({})
-  const [coordinates, setCoordinates] = useState({ lng: 37.6170572, lat: 55.752139, zoom: 10.25 })
+  const [coordinates] = useState({ lng: 37.6170572, lat: 55.752139, zoom: 10.25 })
 
   const mapContainer = useRef(null)
 
   useEffect(() => {
     if (mapContainer.current) {
-      const newMapBoxGl = new mapboxgl.Map({
+      new mapboxgl.Map({
         container: mapContainer.current,
         style: 'mapbox://styles/mapbox/streets-v11',
         center: [coordinates.lng, coordinates.lat],
         zoom: coordinates.zoom
       })
-      newMapBoxGl.on('move', () => {
-        setCoordinates({
-          lng: newMapBoxGl.getCenter().lng.toFixed(4),
-          lat: newMapBoxGl.getCenter().lat.toFixed(4),
-          zoom: newMapBoxGl.getZoom().toFixed(2)
-        })
-      })
     }
-  }, [])
+  }, [coordinates])
 
   const generateInputs = (someArr) => {
     return someArr.map(({ label, name }) => {
