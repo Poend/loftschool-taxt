@@ -3,14 +3,14 @@ import Auth from '../Auth'
 import Header from '../Header'
 import Order from '../Order'
 import Profile from '../Profile'
-import { authContext } from '../../Context/AuthContext'
+import { AuthContext } from '../../Context/AuthContext'
 import { Route, Switch, Redirect } from 'react-router-dom'
 // import { connect } from 'react-redux'
 import propTypes from 'prop-types'
 
 function App({ classes }) {
 
-  const authCtx = useContext(authContext)
+  const authCtx = useContext(AuthContext)
 
   const { isLoggedIn } = authCtx
 

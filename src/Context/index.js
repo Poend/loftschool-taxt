@@ -1,2 +1,2 @@
-import AuthContext from './AuthContext'
-export default AuthContext
+import { AuthProvider } from './AuthContext'
+export default AuthProvider

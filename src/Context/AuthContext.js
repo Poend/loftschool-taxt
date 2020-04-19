@@ -1,27 +1,24 @@
 import React, { createContext, useState } from 'react'
 
-export const authContext = createContext()
-const AuthProvider = authContext.Provider
+export const AuthContext = createContext()
 
 const user = {
   login: 'test',
   password: 'test'
 }
 
-const AuthContext = ({children}) => {
+export const AuthProvider = ({children}) => {
   const [ isLoggedIn, setIsLoggedIn ] = useState(false)
   const login = (login, password) => setIsLoggedIn(login === user.login && password === user.password ? true : false)
   const logout = () => setIsLoggedIn(false)
 
   return (
-    <AuthProvider value={{
+    <AuthContext.Provider value={{
         isLoggedIn,
         login,
         logout
     }}>
       {children}
-    </AuthProvider>
+    </AuthContext.Provider>
   )
 }
-
-export default AuthContext

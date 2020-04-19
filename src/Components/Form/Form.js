@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-import { authContext } from '../../Context/AuthContext'
+import { AuthContext } from '../../Context/AuthContext'
 import Input from '@material-ui/core/Input'
 import FormLabel from '@material-ui/core/FormLabel'
 import Link from '@material-ui/core/Link'
@@ -23,7 +23,8 @@ const Form = ({ classes }) => {
     form
   } = classes
 
-  const authCtx = useContext(authContext)
+
+  const authCtx = useContext(AuthContext)
   const { login = {} } = authCtx
 
   const [authType, setAuthType] = useState('signin')
@@ -59,7 +60,6 @@ const Form = ({ classes }) => {
               [`${event.target.name}`]: event.target.value
             })}
           />
-
         </div>
       )
     })
@@ -73,19 +73,19 @@ const Form = ({ classes }) => {
   return (
     <div className={formLayout}>
       <div className={formHeader}>
-        <h1 className={h1}>
+        <h1 data-testid='header' className={h1}>
           {data[authType].headerText}
         </h1>
         <p>
           {data[authType].subscription}
-          <Link className={link} href="/" onClick={(event) => changeAuthType(event, authType)}>
+          <Link data-testid='change-auth-type' className={link} href="/" onClick={(event) => changeAuthType(event, authType)}>
             {data[authType].linkText}
           </Link>
         </p>
       </div>
       <form className={form} onSubmit={(event) => submit(event)}>
         {generateInputs(data[authType].inputs)}
-        <Button className={button} type='submit'>
+        <Button role='submit' className={button} type='submit'>
           {data[authType].buttonText}
         </Button>
       </form>
@@ -95,7 +95,7 @@ const Form = ({ classes }) => {
 
 // prop-types
 Form.propTypes = {
-  classes: propTypes.object,
+  classes: propTypes.object.isRequired,
 }
 // Form.propTypes = {
 //   classes: propTypes.object,

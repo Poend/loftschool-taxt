@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react'
-import mapboxgl from 'mapbox-gl'
+// import mapboxgl from 'mapbox-gl'
 import Input from '@material-ui/core/Input'
 import FormLabel from '@material-ui/core/FormLabel'
 import Button from '@material-ui/core/Button'
 import propTypes from 'prop-types'
 import data from './data'
 
-mapboxgl.accessToken = 'pk.eyJ1IjoiZG1pdHJpeS1seW5rYWdlIiwiYSI6ImNrOHpoOXRiajBycG0zZXRhZ256aTUxaG8ifQ.kd3Zw0dq9lwmO03qe9y1ew'
+// mapboxgl.accessToken = 'pk.eyJ1IjoiZG1pdHJpeS1seW5rYWdlIiwiYSI6ImNrOHpoOXRiajBycG0zZXRhZ256aTUxaG8ifQ.kd3Zw0dq9lwmO03qe9y1ew'
 
 const Order = ({ classes }) => {
 
@@ -23,12 +23,12 @@ const Order = ({ classes }) => {
 
   useEffect(() => {
     if (mapContainer.current) {
-      new mapboxgl.Map({
-        container: mapContainer.current,
-        style: 'mapbox://styles/mapbox/streets-v11',
-        center: [coordinates.lng, coordinates.lat],
-        zoom: coordinates.zoom
-      })
+      // new mapboxgl.Map({
+      //   container: mapContainer.current,
+      //   style: 'mapbox://styles/mapbox/streets-v11',
+      //   center: [coordinates.lng, coordinates.lat],
+      //   zoom: coordinates.zoom
+      // })
     }
   }, [coordinates])
 
