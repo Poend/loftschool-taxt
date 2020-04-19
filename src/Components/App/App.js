@@ -1,8 +1,8 @@
 import React, { useState, useContext } from 'react';
-import Auth from '../Auth'
+import Auth from '../../Pages/Auth'
 import Header from '../Header'
-import Order from '../Order'
-import Profile from '../Profile'
+import Order from '../../Pages/Order'
+import Profile from '../../Pages/Profile'
 import { AuthContext } from '../../Context/AuthContext'
 import { Route, Switch, Redirect } from 'react-router-dom'
 // import { connect } from 'react-redux'

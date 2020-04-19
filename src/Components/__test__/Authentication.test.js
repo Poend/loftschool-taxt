@@ -1,7 +1,9 @@
 import React, { useContext } from 'react'
-import Form from '../Form'
+import Forms from '../Forms'
 import { AuthProvider, AuthContext } from '../../Context/AuthContext'
 import { render, fireEvent } from '@testing-library/react'
+
+const { Authentication } = Forms
 
 const passedAuthTest = {
   login: 'test',
@@ -13,25 +15,25 @@ const failedAuthTest = {
   password: 'qwe'
 }
 
-describe('testing auth/reg form', () => {
+describe('testing authentication form', () => {
 
   it('render without errors', () => {
-    render(<AuthProvider ><Form /></AuthProvider>)
+    render(<AuthProvider ><Authentication /></AuthProvider>)
   })
 
   it('passed authentication', () => {
     const TestComponent = () => {
-      const {isLoggedIn} = useContext(AuthContext)
+      const { isLoggedIn } = useContext(AuthContext)
 
       return (
         <>
           <div data-testid='isloggedin-value'>{isLoggedIn.toString()}</div>
-          <Form />
+          <Authentication />
         </>
       )
     }
 
-    const form = render(<AuthProvider><TestComponent/></AuthProvider>)
+    const form = render(<AuthProvider><TestComponent /></AuthProvider>)
     // login input
     const loginInput = form.getByLabelText('Имя пользователя')
     fireEvent.change(loginInput, { target: { value: passedAuthTest.login } })
@@ -50,17 +52,17 @@ describe('testing auth/reg form', () => {
 
   it('failed authentication', () => {
     const TestComponent = () => {
-      const {isLoggedIn} = useContext(AuthContext)
+      const { isLoggedIn } = useContext(AuthContext)
 
       return (
         <>
           <div data-testid='isloggedin-value'>{isLoggedIn.toString()}</div>
-          <Form />
+          <Authentication />
         </>
       )
     }
 
-    const form = render(<AuthProvider><TestComponent/></AuthProvider>)
+    const form = render(<AuthProvider><TestComponent /></AuthProvider>)
     // login input
     const loginInput = form.getByLabelText('Имя пользователя')
     fireEvent.change(loginInput, { target: { value: failedAuthTest.login } })
@@ -77,15 +79,22 @@ describe('testing auth/reg form', () => {
     expect(isloggedinValue).toBe('false')
   })
 
-  it('change form type', () => {
-    const form = render(<AuthProvider><Form/></AuthProvider>)
-    // get text
-    expect(form.getByTestId('header').innerHTML).toBe('Войти')
+  it('change form type to registration', () => {
+    const TestComponent = () => {
+      const { authType } = useContext(AuthContext)
+
+      return (
+        <>
+          <div data-testid='authtype-value'>{authType.toString()}</div>
+          <Authentication />
+        </>
+      )
+    }
+    const form = render(<AuthProvider><TestComponent /></AuthProvider>)
     // simulate click
     expect(form.getByTestId('change-auth-type').innerHTML).toBe('Зарегистрируйтесь')
     fireEvent.click(form.getByTestId('change-auth-type'))
     // check new values
-    expect(form.getByTestId('header').innerHTML).toBe('Регистрация')
-    expect(form.getByTestId('change-auth-type').innerHTML).toBe('Войти')
+    expect(form.getByTestId('authtype-value').innerHTML).toBe('signup')
   })
 })

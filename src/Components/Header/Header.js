@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Button from '@material-ui/core/Button'
 import { Link } from 'react-router-dom'
 import { Logo } from 'loft-taxi-mui-theme'
 import propTypes from 'prop-types'
+import { AuthContext } from '../../Context/AuthContext'
 
 const Header = ({ menuItems, classes }) => {
 
@@ -12,13 +13,17 @@ const Header = ({ menuItems, classes }) => {
     headerWrapper
   } = classes
 
+  const authCtx = useContext(AuthContext)
+  const { isLoggedIn, logout = {} } = authCtx
+
   const generateMenuItems = (someArr) => {
     return someArr.map(({ text, link, active }) => {
       return (
         <Link
           style={{ textDecoration: 'none' }}
           to={`${link}`}
-          key={link}>
+          key={link}
+          onClick={() => isLoggedIn && text === 'Войти' ? logout() : null}>
           <Button
             className={active ? 'menu-item__active' : null}
           >
