@@ -1,21 +1,22 @@
-export const SET_AUTH_STATUS = 'SET_AUTH_STATUS'
+import actions from '../Actions'
+
+const { 
+  getAddressList
+} = actions
 
 const initialState = {
-  authStatus: false,
-  user: {
-    login: 'test',
-    password: 'test'
-  }
+  addressList: []
 }
 
 export const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case SET_AUTH_STATUS:
+    case getAddressList.toString():
       return state = {
         ...state,
-        authStatus: action.payload
+        addressList: action.payload
       }
-  
+    
+
     default:
       return state
   }

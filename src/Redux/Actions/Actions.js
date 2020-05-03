@@ -1,8 +1,7 @@
-import * as Types from '../Reducer'
+import { createAction } from 'redux-actions'
 
-export const setAuthStatus = payload => {
-  return {
-    type: Types.SET_AUTH_STATUS,
-    payload
-  }
-}
+export const login = createAction('LOGIN')
+export const changeFormType = createAction('CHANGE_FORM_TYPE')
+export const registration = createAction('REGISTRATION')
+export const getAddressList = createAction('GET_ADDRESS_LIST')
+export const regToken = createAction('SET_REG_TOKEN')

@@ -1,18 +1,17 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import Auth from '../../Pages/Auth'
 import Header from '../Header'
 import Order from '../../Pages/Order'
 import Profile from '../../Pages/Profile'
-import { AuthContext } from '../../Context/AuthContext'
 import { Route, Switch, Redirect } from 'react-router-dom'
-// import { connect } from 'react-redux'
+import { connect } from 'react-redux'
 import propTypes from 'prop-types'
+import { Store } from '../../Redux/Store'
+import PrivateRoute from '../PrivateRoute'
 
-function App({ classes }) {
+const App = ({ classes, authStatus }) => {
 
-  const authCtx = useContext(AuthContext)
-
-  const { isLoggedIn } = authCtx
+  Store.subscribe(() => localStorage.setItem('state', JSON.stringify(Store.getState())))
 
   const {
     mainLayout
@@ -26,23 +25,32 @@ function App({ classes }) {
 
   return (
     <div className={mainLayout}>
-      {isLoggedIn
+      {authStatus
         ?
         <Switch>
-          <Route path='/order'>
-            <Header menuItems={menuItems} setMenuItems={setMenuItems} />
-            <Order />
-          </Route>
-          <Route path='/profile'>
-            <Header menuItems={menuItems} setMenuItems={setMenuItems} />
-            <Profile />
-          </Route>
+          <PrivateRoute path='/order' components={
+            <>
+              <Header menuItems={menuItems} setMenuItems={setMenuItems} />
+              <Order />
+            </>
+          }>
+          </PrivateRoute>
+          <PrivateRoute path='/profile' components={
+            <>
+              <Header menuItems={menuItems} setMenuItems={setMenuItems} />
+              <Profile />
+            </>
+          }>
+          </PrivateRoute>
           <Redirect to='/order' />
+          <Redirect to='/' />
         </Switch>
         :
-        <Redirect to='/' />
+        <>
+          <Route exact path='/' component={Auth} />
+          <Redirect to='/' />
+        </>
       }
-      <Route exact path='/' component={Auth} />
     </div>
   );
 }
@@ -50,17 +58,13 @@ function App({ classes }) {
 // prop-types
 App.propTypes = {
   classes: propTypes.object,
+  authStatus: propTypes.bool.isRequired
 }
-// App.propTypes = {
-//   classes: propTypes.object,
-//   authStatus: propTypes.bool.isRequired
-// }
 
-// const mapStateToProps = ({ authStatus }) => {
-//   return {
-//     authStatus
-//   }
-// }
+const mapStateToProps = ({ system }) => {
+  return {
+    authStatus: system.authStatus
+  }
+}
 
-export default App
-// export default connect(mapStateToProps)(App)
+export default connect(mapStateToProps)(App)

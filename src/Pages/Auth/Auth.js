@@ -1,23 +1,21 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { Logo } from 'loft-taxi-mui-theme'
 import propTypes from 'prop-types'
 import Forms from '../../Components/Forms'
-import { AuthContext } from '../../Context/AuthContext'
+import { connect } from 'react-redux'
 
 const { Authentication, Registration } = Forms
 
-const Auth = ({ classes }) => {
+const Auth = ({ classes, isAuthForm }) => {
+
   const {
     layoutBg
   } = classes
 
-  const authCtx = useContext(AuthContext)
-  const { authType } = authCtx
-
   return (
     <div className={layoutBg}>
       <Logo />
-      {authType === 'signin'
+      {isAuthForm
         ? <Authentication />
         : <Registration />
       }
@@ -30,4 +28,10 @@ Auth.propTypes = {
   classes: propTypes.object
 }
 
-export default Auth
+const mapStateToProps = ({ system }) => {
+  return {
+    isAuthForm: system.isAuthForm
+  }
+}
+
+export default connect(mapStateToProps)(Auth)

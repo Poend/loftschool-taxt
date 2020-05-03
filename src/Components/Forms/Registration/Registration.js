@@ -1,14 +1,16 @@
-import React, { useState, useContext } from 'react'
-import { AuthContext } from '../../../Context/AuthContext'
+import React, { useState } from 'react'
 import Input from '@material-ui/core/Input'
 import FormLabel from '@material-ui/core/FormLabel'
 import Link from '@material-ui/core/Link'
 import Button from '@material-ui/core/Button'
 import data from './data'
 import propTypes from 'prop-types'
+import actions from '../../../Redux/Actions'
+import { connect } from 'react-redux'
 
+const { changeFormType, registration } = actions
 
-const Registration = ({ classes }) => {
+const Registration = ({ classes, changeFormType, isAuthForm, reg }) => {
 
   const {
     formLayout,
@@ -20,9 +22,6 @@ const Registration = ({ classes }) => {
     button,
     form
   } = classes
-
-  const authCtx = useContext(AuthContext)
-  const { login = {}, toAuthentication } = authCtx
 
   const [formData, setFormData] = useState({})
 
@@ -58,7 +57,7 @@ const Registration = ({ classes }) => {
 
   const submit = (event) => {
     event.preventDefault()
-    login(formData.login, formData.password)
+    reg(formData)
   }
 
   return (
@@ -69,11 +68,11 @@ const Registration = ({ classes }) => {
         </h1>
         <p>
           {data.subscription}
-          <Link 
-            data-testid='change-auth-type' 
-            className={link} 
-            href="/" 
-            onClick={(event) => toAuthentication(event)}>
+          <Link
+            data-testid='change-auth-type'
+            className={link}
+            href="#"
+            onClick={() => changeFormType()}>
             {data.linkText}
           </Link>
         </p>
@@ -92,4 +91,17 @@ Registration.propTypes = {
   classes: propTypes.object.isRequired
 }
 
-export default Registration
+const mapStateToProps = ({ system }) => {
+  return {
+    isAuthForm: system.isAuthForm
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    changeFormType,
+    reg: (formData) => dispatch(registration(formData))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Registration)

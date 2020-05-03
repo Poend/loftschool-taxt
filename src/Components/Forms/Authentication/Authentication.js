@@ -1,14 +1,15 @@
-import React, { useState, useContext } from 'react'
-import { AuthContext } from '../../../Context/AuthContext'
+import React, { useState } from 'react'
 import Input from '@material-ui/core/Input'
 import FormLabel from '@material-ui/core/FormLabel'
 import Link from '@material-ui/core/Link'
 import Button from '@material-ui/core/Button'
 import data from './data'
 import propTypes from 'prop-types'
+import { connect } from 'react-redux'
+import actions from '../../../Redux/Actions'
+import request from '../../../requests'
 
-
-const Authentication = ({ classes }) => {
+const Authentication = ({ classes, changeFormType, isAuthForm, login, reg }) => {
 
   const {
     formLayout,
@@ -21,8 +22,6 @@ const Authentication = ({ classes }) => {
     form
   } = classes
 
-  const authCtx = useContext(AuthContext)
-  const { login = {}, toRegistration } = authCtx
 
   const [formData, setFormData] = useState({})
 
@@ -59,7 +58,11 @@ const Authentication = ({ classes }) => {
 
   const submit = (event) => {
     event.preventDefault()
-    login(formData.login, formData.password)
+    request({ type: 'login', payload: { ...formData } })
+      .then(res => {
+        login(res.success)
+        reg(res.token)
+      })
   }
 
   return (
@@ -70,11 +73,11 @@ const Authentication = ({ classes }) => {
         </h1>
         <p>
           {data.subscription}
-          <Link 
-            data-testid='change-auth-type' 
-            className={link} 
-            href="/" 
-            onClick={(event) => toRegistration(event)}>
+          <Link
+            data-testid='change-auth-type'
+            className={link}
+            href="#"
+            onClick={() => changeFormType(!isAuthForm)}>
             {data.linkText}
           </Link>
         </p>
@@ -93,4 +96,20 @@ Authentication.propTypes = {
   classes: propTypes.object.isRequired
 }
 
-export default Authentication
+const { changeFormType, login, registration } = actions
+
+const mapStateToProps = ({ system }) => {
+  return {
+    isAuthForm: system.isAuthForm
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    changeFormType: () => dispatch(changeFormType()),
+    login: (formData) => dispatch(login(formData)),
+    reg: (token) => dispatch(registration(token))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Authentication)
