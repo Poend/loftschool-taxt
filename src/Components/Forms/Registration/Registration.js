@@ -10,7 +10,7 @@ import { connect } from 'react-redux'
 
 const { changeFormType, registration } = actions
 
-const Registration = ({ classes, changeFormType, isAuthForm, reg }) => {
+const Registration = ({ classes, changeFormType, reg }) => {
 
   const {
     formLayout,
@@ -99,7 +99,7 @@ const mapStateToProps = ({ system }) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    changeFormType,
+    changeFormType: () => dispatch(changeFormType()),
     reg: (formData) => dispatch(registration(formData))
   }
 }

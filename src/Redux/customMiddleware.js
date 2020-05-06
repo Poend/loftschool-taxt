@@ -4,6 +4,7 @@ const {
   registration,
   login,
   changeFormType,
+  setFormType,
   regToken
 } = actions
 
@@ -19,6 +20,7 @@ export const middleware = store => next => action => {
         })
       })
         .then(res => res.json()).then(data => {
+          console.log(data)
           store.dispatch(regToken(data.token))
         })
       next(action)
@@ -37,9 +39,9 @@ export const middleware = store => next => action => {
       break
 
     case changeFormType.toString():
-      console.log('asdasd')
       const curValue = store.getState().system.isAuthForm
-      store.dispatch(changeFormType(!curValue))
+      console.log(curValue)
+      store.dispatch(setFormType(!curValue))
       next(action)
       break
 
