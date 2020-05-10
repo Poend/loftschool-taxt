@@ -10,7 +10,7 @@ import { connect } from 'react-redux'
 
 const { changeFormType, registration } = actions
 
-const Registration = ({ classes, changeFormType, reg }) => {
+const Registration = ({ classes, changeFormType, registration }) => {
 
   const {
     formLayout,
@@ -57,7 +57,7 @@ const Registration = ({ classes, changeFormType, reg }) => {
 
   const submit = (event) => {
     event.preventDefault()
-    reg(formData)
+    registration(formData)
   }
 
   return (
@@ -97,11 +97,6 @@ const mapStateToProps = ({ system }) => {
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    changeFormType: () => dispatch(changeFormType()),
-    reg: (formData) => dispatch(registration(formData))
-  }
-}
+const mapDispatchToProps = {changeFormType, registration}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Registration)

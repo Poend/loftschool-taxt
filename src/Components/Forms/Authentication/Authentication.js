@@ -7,9 +7,8 @@ import data from './data'
 import propTypes from 'prop-types'
 import { connect } from 'react-redux'
 import actions from '../../../Redux/Actions'
-import request from '../../../requests'
 
-const Authentication = ({ classes, changeFormType, isAuthForm, login, reg }) => {
+const Authentication = ({ classes, changeFormType, isAuthForm, login, registration }) => {
 
   const {
     formLayout,
@@ -58,11 +57,7 @@ const Authentication = ({ classes, changeFormType, isAuthForm, login, reg }) => 
 
   const submit = (event) => {
     event.preventDefault()
-    request({ type: 'login', payload: { ...formData } })
-      .then(res => {
-        login(res.success)
-        reg(res.token)
-      })
+    login(formData)
   }
 
   return (
@@ -104,12 +99,6 @@ const mapStateToProps = ({ system }) => {
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    changeFormType: () => dispatch(changeFormType()),
-    login: (formData) => dispatch(login(formData)),
-    reg: (token) => dispatch(registration(token))
-  }
-}
+const mapDispatchToProps = { changeFormType, login, registration }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Authentication)

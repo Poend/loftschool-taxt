@@ -19,9 +19,9 @@ const PrivateRoute = ({ authStatus, components, ...props }) => {
   )
 }
 
-const mapStateToProps = ({ auth }) => {
+const mapStateToProps = ({ system }) => {
   return {
-    authStatus: auth.authStatus
+    authStatus: system.authStatus
   }
 }
 

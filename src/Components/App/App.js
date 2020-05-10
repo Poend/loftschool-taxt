@@ -20,7 +20,7 @@ const App = ({ classes, authStatus }) => {
   const [menuItems, setMenuItems] = useState([
     { text: 'Карта', link: '/order', active: false },
     { text: 'Профиль', link: '/profile', active: false },
-    { text: 'Войти', link: '/', active: true },
+    { text: 'Выйти', link: '/', active: true },
   ])
 
   return (

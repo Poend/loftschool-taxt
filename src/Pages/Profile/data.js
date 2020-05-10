@@ -1,10 +1,10 @@
 export default {
   left: [
-    { label: 'Номер карты:', name: 'card-nubmer', },
-    { label: 'Срок действия:', name: 'card-expiration-date', },
+    { label: 'Номер карты:', name: 'cardNumber', },
+    { label: 'Срок действия:', name: 'expiryDate', },
   ],
   right: [
-    { label: 'Имя владельца:', name: 'owner-name', },
-    { label: 'CVC', name: 'CVC', type: 'password', changeableType: true, }
+    { label: 'Имя владельца:', name: 'cardName', },
+    { label: 'CVC', name: 'cvc', type: 'password', changeableType: true, }
   ]
 }

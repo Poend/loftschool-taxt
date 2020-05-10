@@ -1,6 +1,8 @@
 import { createAction } from 'redux-actions'
 
 export const login = createAction('LOGIN')
+export const logout = createAction('LOGOUT')
+export const resetState = createAction('RESET_STATE')
 export const registration = createAction('REGISTRATION')
 export const changeFormType = createAction('CHANGE_FORM_TYPE')
 
@@ -8,4 +10,11 @@ export const changeAuthStatus = createAction('CHANGE_AUTH_STATUS')
 export const setFormType = createAction('SET_FORM_TYPE')
 export const setUserData = createAction('SET_USER_DATA')
 export const getAddressList = createAction('GET_ADDRESS_LIST')
+export const setAddressList = createAction('SET_ADDRESS_LIST')
+export const getRoute = createAction('GET_ROUTE')
 export const regToken = createAction('SET_REG_TOKEN')
+export const authToken = createAction('SET_AUTH_TOKEN')
+export const route = createAction('ROUTE')
+export const setCardData = createAction('SET_CARD_DATA')
+export const getCardData = createAction('GET_CARD_DATA')
+export const cardData = createAction('CARD_DATA')

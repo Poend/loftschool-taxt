@@ -4,7 +4,8 @@ const {
   setUserData,
   regToken,
   setFormType,
-  changeAuthStatus
+  changeAuthStatus,
+  authToken,
 } = actions
 
 const initialState = {
@@ -17,7 +18,6 @@ export const reducer = (state = initialState, action) => {
   switch (action.type) {
 
     case setFormType.toString():
-      console.log(action.payload)
       return state = {
         ...state,
         isAuthForm: action.payload
@@ -39,6 +39,12 @@ export const reducer = (state = initialState, action) => {
       return state = {
         ...state,
         regToken: action.payload
+      }
+
+    case authToken.toString():
+      return state = {
+        ...state,
+        authToken: action.payload
       }
 
     default:
