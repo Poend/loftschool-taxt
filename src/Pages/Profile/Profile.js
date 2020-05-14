@@ -1,12 +1,16 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Input from '@material-ui/core/Input'
 import FormLabel from '@material-ui/core/FormLabel'
 import data from './data'
 import propTypes from 'prop-types'
 import { MCIcon } from 'loft-taxi-mui-theme'
 import Button from '@material-ui/core/Button'
+import { connect } from 'react-redux'
+import actions from '../../Redux/Actions'
 
-const Profile = ({ classes }) => {
+const { setCardData, getCardData } = actions
+
+const Profile = ({ classes, setCardData, getCardData, cardData }) => {
 
   const {
     profileLayout,
@@ -22,6 +26,14 @@ const Profile = ({ classes }) => {
   } = classes
 
   const [profileData, setProfileData] = useState({})
+
+  useEffect(() => {
+    getCardData()
+  }, [getCardData])
+
+  useEffect(() => {
+    setProfileData(cardData)
+  }, [cardData])
 
   const generateInputs = (someArr) => {
     return someArr.map(el => {
@@ -59,14 +71,16 @@ const Profile = ({ classes }) => {
         <p className={subHeaderText}>Способ оплаты</p>
         <div className={cardWrapper}>
           <div className={card}>
-            <MCIcon className={mcIcon}/>
+            <MCIcon className={mcIcon} />
             {generateInputs(data.left)}
           </div>
           <div className={card}>
             {generateInputs(data.right)}
           </div>
         </div>
-        <Button className={button}>
+        <Button
+          onClick={() => setCardData(profileData)}
+          className={button}>
           Сохранить
         </Button>
       </div>
@@ -78,4 +92,12 @@ Profile.propTypes = {
   classes: propTypes.object
 }
 
-export default Profile
+const mapStateToProps = ({ componentsData }) => {
+  return {
+    cardData: componentsData.cardData
+  }
+}
+
+const mapDispatchToProps = { setCardData, getCardData }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Profile)

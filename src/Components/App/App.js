@@ -1,23 +1,26 @@
 import React, { useState } from 'react';
-import Auth from '../Auth'
+import Auth from '../../Pages/Auth'
 import Header from '../Header'
-import Order from '../Order'
-import Profile from '../Profile'
-// import { authContext } from '../../Context/AuthContext'
+import Order from '../../Pages/Order'
+import Profile from '../../Pages/Profile'
 import { Route, Switch, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import propTypes from 'prop-types'
+import { Store } from '../../Redux/Store'
+import PrivateRoute from '../PrivateRoute'
 
-function App({ classes, authStatus }) {
+const App = ({ classes, authStatus }) => {
+
+  Store.subscribe(() => localStorage.setItem('state', JSON.stringify(Store.getState())))
 
   const {
     mainLayout
   } = classes
 
   const [menuItems, setMenuItems] = useState([
-    { text: 'Карта', link: 'Map', active: false },
-    { text: 'Профиль', link: 'Profile', active: false },
-    { text: 'Войти', link: 'Auth', active: true },
+    { text: 'Карта', link: '/order', active: false },
+    { text: 'Профиль', link: '/profile', active: false },
+    { text: 'Выйти', link: '/', active: true },
   ])
 
   return (
@@ -25,20 +28,28 @@ function App({ classes, authStatus }) {
       {authStatus
         ?
         <Switch>
-          <Route path='/order'>
-            <Header menuItems={menuItems} setMenuItems={setMenuItems} />
-            <Order />
-          </Route>
-          <Route path='/profile'>
-            <Header menuItems={menuItems} setMenuItems={setMenuItems} />
-            <Profile />
-          </Route>
+          <PrivateRoute path='/order' components={
+            <>
+              <Header menuItems={menuItems} setMenuItems={setMenuItems} />
+              <Order />
+            </>
+          }>
+          </PrivateRoute>
+          <PrivateRoute path='/profile' components={
+            <>
+              <Header menuItems={menuItems} setMenuItems={setMenuItems} />
+              <Profile />
+            </>
+          }>
+          </PrivateRoute>
           <Redirect to='/order' />
         </Switch>
         :
-        <Redirect to='/'/>
+        <>
+          <Route exact path='/' component={Auth} />
+          <Redirect to='/' />
+        </>
       }
-      <Route exact path='/' component={Auth} />
     </div>
   );
 }
@@ -49,9 +60,9 @@ App.propTypes = {
   authStatus: propTypes.bool.isRequired
 }
 
-const mapStateToProps = ({ authStatus }) => {
+const mapStateToProps = ({ system }) => {
   return {
-    authStatus
+    authStatus: system.authStatus
   }
 }
 

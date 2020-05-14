@@ -1,17 +1,15 @@
 import React, { useState } from 'react'
-// import { authContext } from '../../Context/AuthContext'
 import Input from '@material-ui/core/Input'
 import FormLabel from '@material-ui/core/FormLabel'
 import Link from '@material-ui/core/Link'
 import Button from '@material-ui/core/Button'
-import { data } from './data'
-import actions from '../../Redux/Actions'
-import { connect } from 'react-redux'
+import data from './data'
 import propTypes from 'prop-types'
+import { connect } from 'react-redux'
+import actions from '../../../Redux/Actions'
 
-const { setAuthStatus } = actions
+const Authentication = ({ classes, changeFormType, isAuthForm, login, registration }) => {
 
-const Form = ({ classes, user }) => {
   const {
     formLayout,
     formHeader,
@@ -23,15 +21,9 @@ const Form = ({ classes, user }) => {
     form
   } = classes
 
-  const [authType, setAuthType] = useState('signin')
+
   const [formData, setFormData] = useState({})
 
-  // const auth = useContext(authContext)
-
-  const changeAuthType = (event, authType) => {
-    event.preventDefault()
-    setAuthType(authType === 'signin' ? 'signup' : 'signin')
-  }
 
   const generateInputs = (someArr) => {
     return someArr.map(el => {
@@ -58,7 +50,6 @@ const Form = ({ classes, user }) => {
               [`${event.target.name}`]: event.target.value
             })}
           />
-
         </div>
       )
     })
@@ -66,45 +57,48 @@ const Form = ({ classes, user }) => {
 
   const submit = (event) => {
     event.preventDefault()
-    if(formData.login === user.login && formData.password === user.password){
-      setAuthStatus(true)
-    }
+    login(formData)
   }
 
   return (
     <div className={formLayout}>
       <div className={formHeader}>
-        <h1 className={h1}>
-          {data[authType].headerText}
+        <h1 data-testid='header' className={h1}>
+          {data.headerText}
         </h1>
         <p>
-          {data[authType].subscription}
-          <Link className={link} href="/" onClick={(event) => changeAuthType(event, authType)}>
-            {data[authType].linkText}
+          {data.subscription}
+          <Link
+            data-testid='change-auth-type'
+            className={link}
+            href="#"
+            onClick={() => changeFormType(!isAuthForm)}>
+            {data.linkText}
           </Link>
         </p>
       </div>
       <form className={form} onSubmit={(event) => submit(event)}>
-        {generateInputs(data[authType].inputs)}
-        <Button className={button} type='submit'>
-          {data[authType].buttonText}
+        {generateInputs(data.inputs)}
+        <Button role='submit' className={button} type='submit'>
+          {data.buttonText}
         </Button>
       </form>
     </div>
   )
 }
 
-// prop-types
-Form.propTypes = {
-  classes: propTypes.object,
-  user: propTypes.object.isRequired
+Authentication.propTypes = {
+  classes: propTypes.object.isRequired
 }
 
-const mapStateToProps = ({ user }) => {
+const { changeFormType, login, registration } = actions
+
+const mapStateToProps = ({ system }) => {
   return {
-    user
+    isAuthForm: system.isAuthForm
   }
 }
 
+const mapDispatchToProps = { changeFormType, login, registration }
 
-export default connect(mapStateToProps)(Form)
+export default connect(mapStateToProps, mapDispatchToProps)(Authentication)
