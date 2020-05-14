@@ -6,15 +6,15 @@ const PrivateRoute = ({ authStatus, components, ...props }) => {
 
   return (
     <>
-    {authStatus
-      ?
-      <Route 
-        {...props}
-        render={() => components}
-      />
-      :
-      <Redirect to='/' />
-    }
+      {authStatus
+        ?
+        <Route
+          {...props}
+          render={() => components}
+        />
+        :
+        <Redirect to='/' />
+      }
     </>
   )
 }

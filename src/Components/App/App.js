@@ -43,7 +43,6 @@ const App = ({ classes, authStatus }) => {
           }>
           </PrivateRoute>
           <Redirect to='/order' />
-          <Redirect to='/' />
         </Switch>
         :
         <>

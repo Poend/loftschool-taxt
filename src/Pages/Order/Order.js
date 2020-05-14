@@ -45,7 +45,7 @@ const Order = ({ classes, addressList, getAddressList, getRoute, route }) => {
   }, [coordinates])
 
   useEffect(() => {
-    if (route && route.length > 0 && mapElement) {
+    if (route && route.length > 0 && mapElement && !mapElement.getSource('route')) {
       mapElement.on('load', () => {
         mapElement.addSource('route', {
           'type': 'geojson',
@@ -70,7 +70,62 @@ const Order = ({ classes, addressList, getAddressList, getRoute, route }) => {
             'line-color': '#888',
             'line-width': 8
           }
-        });
+        })
+      })
+    }
+  }, [route, mapElement])
+
+  useEffect(() => {
+    if (mapElement && mapElement.getSource('route')) {
+      mapElement.removeSource('route')
+      mapElement.addSource('route', {
+        'type': 'geojson',
+        'data': {
+          'type': 'Feature',
+          'properties': {},
+          'geometry': {
+            'type': 'LineString',
+            'coordinates': route
+          }
+        }
+      })
+      mapElement.addLayer({
+        'id': 'route',
+        'type': 'line',
+        'source': 'route',
+        'layout': {
+          'line-join': 'round',
+          'line-cap': 'round'
+        },
+        'paint': {
+          'line-color': '#888',
+          'line-width': 8
+        }
+      })
+    } else if(mapElement){
+      mapElement.addSource('route', {
+        'type': 'geojson',
+        'data': {
+          'type': 'Feature',
+          'properties': {},
+          'geometry': {
+            'type': 'LineString',
+            'coordinates': route
+          }
+        }
+      })
+      mapElement.addLayer({
+        'id': 'route',
+        'type': 'line',
+        'source': 'route',
+        'layout': {
+          'line-join': 'round',
+          'line-cap': 'round'
+        },
+        'paint': {
+          'line-color': '#888',
+          'line-width': 8
+        }
       })
     }
   }, [route, mapElement])
